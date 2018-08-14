@@ -1,20 +1,24 @@
 <template>
-  
+  <section class="home">
+    <movies-list v-for="item in listTypes" v-if="item.isCategory" :type="'component'" :mode="'collection'" :category="item.query" :shortList="true"></movies-list>
+  </section>
 </template>
 
 <script>
+import storage from '../storage.js'
+import MoviesList from './MoviesList.vue'
+
 export default {
-  name: 'Home',
+  components: { MoviesList },
+  name: 'home-category',
   data () {
     return {
-      statePage: 'Home'
+      listTypes: storage.listTypes
     }
   },
-  methods: {
-    chStatePageToResume () {
-      this.statePage = 'Resume'
-      console.log(this.statePage)
-    }
+  created () {
+    document.title = 'TMDb'
+    storage.backTitle = document.title
   }
 }
 </script>

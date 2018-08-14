@@ -8,8 +8,8 @@ import VueResource from 'vue-resource'
 import VueRange from 'vue-for-range'
 import VeeValidate from 'vee-validate'
 import swal from 'sweetalert'
-Vue.use(VueResource)
-Vue.use(VueRouter, axios)
+window.eventHub = new Vue()
+Vue.use(VueResource, axios)
 
 const config = {
   errorBagName: 'errors', // change if property conflicts

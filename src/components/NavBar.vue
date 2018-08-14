@@ -8,16 +8,10 @@
                               <span class="icon-bar"></span>
                               <span class="icon-bar"></span>
                           </button>
-                        <img class="logo" src="../assets/tokoflix.png">
-                      </div>
-
-                      <div class="collapse navbar-collapse" id="myNavbar">
-                          <ul class="nav navbar-nav navbar-right">
-                          </ul>
+                        <img class="logo" src="static/tokoflix.png">
                       </div>
                   </div>
               </nav>
-
     <div class="jumbotron text-center">
       <br>
       <h1>Watch Now!</h1>
