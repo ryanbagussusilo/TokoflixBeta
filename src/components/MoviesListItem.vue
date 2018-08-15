@@ -1,6 +1,6 @@
 <template>
   <li class="movies-item">
-    <a class="movies-item__link" :class="{'no-image': noImage}" :href="'/movie/' + movie.id" @click.prevent="openMoviePopup(movie.id, true)">
+    <a class="movies-item__link" :class="{'no-image': noImage}" v-on:click="setFilmclicked(movie.id);goToDetilFilm()" type="button">
       <figure class="movies-item__poster">
         <img v-if="!noImage" class="movies-item__img" src="static/no-image.png" v-img="poster()" alt="">
         <img v-if="noImage" class="movies-item__img is-loaded" src="static/no-image.png" alt="">
@@ -14,7 +14,6 @@
 
 <script>
 import img from '../atributs/v-image.js'
-import eventHub from '../main.js'
 
 export default {
   props: ['movie'],
@@ -23,7 +22,8 @@ export default {
   },
   data () {
     return {
-      noImage: false
+      noImage: false,
+      id: ''
     }
   },
   methods: {
@@ -34,8 +34,13 @@ export default {
         this.noImage = true
       }
     },
-    openMoviePopup (id, event) {
-      eventHub.$emit('openMoviePopup', id, event)
+    setFilmclicked (id) {
+      this.id = id
+    },
+    goToDetilFilm () {
+      window.sessionStorage.setItem('movieidprops', this.id)
+      this.$router.push({path: '/DetilFilm'})
+      console.log('movieidprops')
     }
   }
 }

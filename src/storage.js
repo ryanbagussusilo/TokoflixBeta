@@ -19,9 +19,7 @@ let storage = {
   ],
   categories: {},
   backTitle: '',
-  moviePath: '',
-  createMoviePopup: false,
-  moviePopupOnHistory: false
+  moviePath: ''
 }
 storage.listTypes.forEach(function (listType) {
   storage.categories[listType.query] = listType.title

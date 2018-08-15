@@ -46,22 +46,6 @@
                 </h2>
                 <div class="movie__details-text" v-formatDate="movie.release_date"></div>
               </div>
-              <div v-if="movie.release_date" class="movie__details-block">
-                <h2 class="movie__details-title">
-                  Rating
-                </h2>
-                <div class="movie__details-text">
-                  {{ movie.vote_average}}
-                </div>
-              </div>
-              <div v-if="movie.release_date" class="movie__details-block">
-                <h2 class="movie__details-title">
-                  Price
-                </h2>
-                <div class="movie__details-text">
-                  {{ this.price }}
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -78,9 +62,7 @@ import formatDate from '../atributs/v-formatDate.js'
 import eventHub from '../main.js'
 
 export default {
-  props: ['id', 'type', 'movieidprops'],
-  name: 'DetilFilm',
-  id: '353081',
+  props: ['id', 'type'],
   directives: {
     img: img,
     formatDate: formatDate
@@ -90,10 +72,7 @@ export default {
       movie: {},
       movieLoaded: false,
       moviePosterSrc: '',
-      movieBackdropSrc: '',
-      price: 0,
-      rate: 0,
-      movieid: ''
+      movieBackdropSrc: ''
       // userLoggedIn: storage.sessionId ? true : false,
       // favoriteChecked: false,
       // favorite: ''
@@ -101,14 +80,12 @@ export default {
   },
   methods: {
     fetchMovie (id) {
-      axios.get(`https://api.themoviedb.org/3/movie/${this.movieid}?api_key=${storage.apiKey}&language=en-US`)
+      axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${storage.apiKey}&language=en-US`)
       .then(function (resp) {
         let movie = resp.data
         this.movie = movie
-        this.rate = movie.vote_average
         this.poster()
         this.backdrop()
-        this.getprice(this.rate)
         if (this.userLoggedIn) {
           this.checkIfInFavorites(movie.id)
         } else {
@@ -161,17 +138,6 @@ export default {
         this.favorite = favoriteInvert
         eventHub.$emit('updateFavorite')
       }.bind(this))
-    },
-    getprice (rate) {
-      if (rate > 0 && rate < 3) {
-        this.price = 3500
-      } else if (rate >= 3 && rate < 6) {
-        this.price = 8250
-      } else if (rate >= 6 && rate < 8) {
-        this.price = 16350
-      } else {
-        this.price = 21250
-      }
     }
   },
   watch: {
@@ -180,31 +146,214 @@ export default {
     }
   },
   created () {
-    this.movieid = window.sessionStorage.getItem('movieidprops')
-    this.fetchMovie(this.movieid)
-    this.getprice()
+    this.fetchMovie(this.id)
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="scss">
+@import "./src/scss/variables";
+@import "./src/scss/media-queries";
 
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
+.movie{
+  &__wrap{
+    display: flex;
+    &--page{
+      max-width: 768px;
+      position: relative;
+      margin: 0 auto;
+    }
+    &--header{
+      align-items: center;
+      height: 100%;
+    }
+    &--main{
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      @include tablet-min{
+        flex-direction: row;
+      }
+    }
+  }
+  &__header{
+    height: 250px;
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-color: $c-dark;
+    @include tablet-min{
+      height: 350px;
+      &--page{
+        height: 384px;
+      }
+    }
+    &:before{
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba($c-dark, 0.85);
+    }
+  }
+    &__poster{
+      display: none;
+      @include tablet-min{
+        background: $c-dark;
+        display: block;
+        position: absolute;
+        width: calc(45% - 40px);
+        top: 40px;
+        left: 40px;
+      }
+    }
+      &__img{
+        display: block;
+        width: 100%;
+        opacity: 0;
+        transform: scale(0.97) translateZ(0);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        &.is-loaded{
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    &__title{
+      position: relative;
+      padding: 20px;
+      color: $c-green;
+      text-align: center;
+      width: 100%;
+      @include tablet-min{
+        width: 55%;
+        text-align: left;
+        margin-left: 45%;
+        padding: 30px 30px 30px 40px;
+      }
+      &-text{
+        font-weight: 500;
+        line-height: 1.4;
+        font-size: 24px;
+        @include tablet-min{
+          font-size: 30px;
+        }
+        span{
+          display: block;
+          font-size: 14px;
+          font-weight: 300;
+          color: rgba($c-white, 0.7);
+          margin-top: 10px;
+        }
+      }
+    }
+  &__main{
+    background: $c-light;
+    min-height: calc(100vh - 250px);
+    @include tablet-min{
+      min-height: 0;
+    }
+  }
+    &__actions{
+      text-align: center;
+      width: 100%;
+      order: 2;
+      padding: 20px;
+      border-top: 1px solid rgba($c-dark, 0.05);
+      @include tablet-min{
+        order: 1;
+        width: 45%;
+        padding: 185px 0 40px 40px;
+        border-top: 0;
+      }
+      &-link{
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        text-transform: uppercase;
+        color: rgba($c-dark, 0.5);
+        transition: color 0.5s ease;
+        font-size: 11px;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba($c-dark, 0.05);
+        &:hover{
+          color: rgba($c-dark, 0.75);
+        }
+        &.active{
+          color: $c-dark;
+        }
+      }
+      &-icon{
+        width: 16px;
+        height: 16px;
+        margin: 0 10px 0 0;
+        fill: rgba($c-dark, 0.5);
+        transition: fill 0.5s ease, transform 0.5s ease;
+        &.waiting{
+          transform: scale(0.8, 0.8);
+        }
+      }
+      &-link:hover &-icon{
+        fill: rgba($c-dark, 0.75);
+      }
+      &-link.active &-icon{
+        fill: $c-green;
+      }
+      &-text{
+        display: block;
+        padding-top: 2px;
+      }
+    }
+    &__info{
+      width: 100%;
+      padding: 20px;
+      order: 1;
+      @include tablet-min{
+        order: 2;
+        padding: 40px;
+        width: 55%;
+        margin-left: 45%;
+      }
+    }
+    &__actions + &__info{
+      margin-left: 0;
+    }
+      &__description{
+        font-weight: 300;
+        font-size: 13px;
+        line-height: 1.8;
+        margin-bottom: 20px;
+        @include tablet-min{
+          margin-bottom: 30px;
+          font-size: 14px;
+        }
+      }
+      &__details{
+        &-block:not(:last-child){
+          margin-bottom: 20px;
+          @include tablet-min{
+            margin-bottom: 30px;
+          }
+        }
+        &-title{
+          margin: 0;
+          font-weight: 400;
+          text-transform: uppercase;
+          font-size: 14px;
+          color: $c-green;
+          @include tablet-min{
+            font-size: 16px;
+          }
+        }
+        &-text{
+          font-weight: 300;
+          font-size: 14px;
+          margin-top: 5px;
+        }
+      }
 }
 </style>

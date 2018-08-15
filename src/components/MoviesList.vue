@@ -1,27 +1,13 @@
 <template>
   <div class="wrapper" v-if="listLoaded">
     <div class="movies" v-if="movies.length">
-      <header class="movies__header">
         <h2 class="movies__title">{{ listTitle }}</h2>
         <span class="movies__results" v-if="!shortList">{{ countResults }}</span>
-        <router-link v-if="shortList" class="movies__link" :to="{name: 'home-category', params: {category: category}}">
-          View All
-        </router-link>
-      </header>
-      <ul class="movies__list">
+        <ul class="movies__list">
         <movies-list-item class="movies__item" v-for="(movie, index) in movies" :movie="movie"></movies-list-item>
       </ul>
-      <div class="movies__nav" v-if="!shortList" :class="{'is-hidden' : currentPage == pages}">
-        <button @click="loadMore" class="button">Load More</button>
-      </div>
     </div>
     <i v-if="!listLoaded" class="loader"></i>
-    <section v-if="!movies.length" class="not-found">
-      <div class="not-found__content">
-        <h2 class="not-found__title" v-if="mode == 'search'">Nothing Found</h2>
-        <h2 class="not-found__title" v-if="mode == 'favorite'">You haven't added any favorite movies</h2>
-      </div>
-    </section>
   </div>
 </template>
 
@@ -83,29 +69,11 @@ export default {
       axios.get(this.request)
       .then(function (resp) {
         let data = resp.data
-        if (this.shortList) {
-          this.movies = data.results.slice(0, 5)
-          this.pages = 1
-          this.results = 5
-        } else {
-          this.movies = data.results
-          this.pages = data.total_pages
-          this.results = data.total_results
-        }
+        this.movies = data.results
+        this.pages = data.total_pages
+        this.results = data.total_results
         this.listLoaded = true
           // Change Page title
-        if (this.type === 'page') {
-          document.title = this.pageTitle
-        }
-      }.bind(this))
-    },
-    loadMore () {
-      this.currentPage++
-      axios.get(this.request)
-      .then(function (resp) {
-        let data = resp.data
-        let newData = this.movies.concat(data.results)
-        this.movies = newData
       }.bind(this))
     },
     updateFavorite () {
