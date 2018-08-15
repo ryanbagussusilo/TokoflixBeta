@@ -1,4 +1,4 @@
 # TokoflixBeta
-npm install \n
-npm run build
-rpn run dev
+## npm install \n
+### npm run build
+#### npm run dev
