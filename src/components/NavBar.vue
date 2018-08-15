@@ -3,13 +3,18 @@
   <nav class="navbar navbar-default navbar-fixed-top">
                   <div class="container">
                       <div class="navbar-header">
-                          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                              <span class="icon-bar"></span>
-                              <span class="icon-bar"></span>
-                              <span class="icon-bar"></span>
-                          </button>
-                        <img class="logo" src="static/tokoflix.png">
+                        <router-link to="/" tag="img" src="static/tokoflix.png"></router-link>
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
                       </div>
+                      <div class="collapse navbar-collapse" id="myNavbar">
+                              <ul class="nav navbar-nav navbar-right">
+                                    <li><router-link to="/Login">Login</router-link></li>
+                              </ul>
+                          </div>
                   </div>
               </nav>
     <div class="jumbotron text-center">
@@ -25,13 +30,18 @@ export default {
   data () {
     return {
     }
+  },
+  methods: {
+    setSaldo (saldo) {
+      this.saldo = saldo
+    }
   }
 }
 </script>
 <style scoped>
 @media screen and (max-width: 480px) {
   .logo {
-      font-size: 150px;
+      font-size: 200px;
   }
 }
 

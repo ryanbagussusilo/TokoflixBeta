@@ -2,9 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import DetilFilm from '@/components/DetilFilm'
-import MoviesList from '@/components/MoviesList'
 import MoviePage from '@/components/MoviePage'
 import eventHub from '../main.js'
+import Login from '@/components/Login'
 Vue.use(Router)
 
 export default new Router({
@@ -21,11 +21,6 @@ export default new Router({
       component: DetilFilm
     },
     {
-      path: '/movies/category',
-      name: 'home-category',
-      components: MoviesList
-    },
-    {
       path: '/movie/:id',
       name: 'movie',
       components: MoviePage,
@@ -36,6 +31,11 @@ export default new Router({
         }
         next()
       }
+    },
+    {
+      path: '/Login',
+      name: 'Login',
+      component: Login
     }
   ]
 })

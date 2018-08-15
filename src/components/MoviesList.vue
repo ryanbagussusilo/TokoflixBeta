@@ -34,6 +34,7 @@ export default {
       listTitle: '',
       movies: [],
       pages: '',
+      saldo: 0,
       results: '',
       currentPage: 1,
       listLoaded: false
@@ -42,6 +43,9 @@ export default {
   computed: {
     pageTitle () {
       return this.listTitle + storage.pageTitlePostfix
+    },
+    setSaldo () {
+      return this.$cookie.set('saldo', 100000, 1)
     },
     query () {
       return this.$route.params.query || ''

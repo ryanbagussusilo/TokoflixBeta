@@ -10,6 +10,7 @@ import VeeValidate from 'vee-validate'
 import swal from 'sweetalert'
 window.eventHub = new Vue()
 Vue.use(VueResource, axios)
+var VueCookie = require('vue-cookie')
 
 const config = {
   errorBagName: 'errors', // change if property conflicts
@@ -37,6 +38,7 @@ const config = {
 Vue.prototype.swal = swal
 Vue.use(VueRange)
 Vue.use(VeeValidate, config)
+Vue.use(VueCookie)
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({

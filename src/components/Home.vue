@@ -1,5 +1,8 @@
 <template>
   <section class="home">
+    <div class="saldo">
+      <h3>Saldo Anda {{this.$cookie.get('saldo')}}</h3>
+    </div>
     <movies-list v-for="item in listTypes" v-if="item.isCategory" :type="'component'" :mode="'collection'" :category="item.query" :shortList="true"></movies-list>
   </section>
 </template>
@@ -17,15 +20,13 @@ export default {
     }
   },
   created () {
-    document.title = 'TMDb'
+    document.title = 'Tokoflix'
     storage.backTitle = document.title
+    this.$cookie.get('saldo')
   }
 }
 </script>
 
-
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 @import "./src/scss/variables";
 @import "./src/scss/media-queries";
@@ -101,6 +102,9 @@ export default {
         fill: $c-dark;
       }
     }
+  }
+  .saldo{
+    text-align: right;
   }
   .wrapper{
     min-height: 0;

@@ -61,6 +61,9 @@
                 <div class="movie__details-text">
                   {{ this.price }}
                 </div>
+                <div class="movie__details-text">
+                  <button class="btn btn-lg btn-success" v-on:click="transaction()">Buy</button>
+                </div>
               </div>
             </div>
           </div>
@@ -78,9 +81,9 @@ import formatDate from '../atributs/v-formatDate.js'
 import eventHub from '../main.js'
 
 export default {
-  props: ['id', 'type', 'movieidprops'],
+  props: ['id', 'type', 'movieidprops', 'saldo'],
   name: 'DetilFilm',
-  id: '353081',
+  id: '',
   directives: {
     img: img,
     formatDate: formatDate
@@ -93,7 +96,8 @@ export default {
       movieBackdropSrc: '',
       price: 0,
       rate: 0,
-      movieid: ''
+      movieid: '',
+      saldo: 0
       // userLoggedIn: storage.sessionId ? true : false,
       // favoriteChecked: false,
       // favorite: ''
@@ -163,7 +167,7 @@ export default {
       }.bind(this))
     },
     getprice (rate) {
-      if (rate > 0 && rate < 3) {
+      if (rate >= 0 && rate < 3) {
         this.price = 3500
       } else if (rate >= 3 && rate < 6) {
         this.price = 8250
@@ -171,6 +175,38 @@ export default {
         this.price = 16350
       } else {
         this.price = 21250
+      }
+    },
+    transaction () {
+      if (this.$cookie.get('saldo') < this.price) {
+        this.swal({
+          title: 'Not Enough Money',
+          animation: false,
+          customClass: 'animated tada'
+        })
+      } else {
+        this.saldo = this.$cookie.get('saldo') - this.price
+        this.swal('Are you sure buy this film ?', {
+          buttons: {
+            cancel: 'No!',
+
+            catch: {
+              text: 'Yes',
+              value: 'catch'
+            }
+          }
+        })
+      .then((value) => {
+        switch (value) {
+          case 'catch':
+            this.swal('Success!', 'Enjoy your film :)', 'success')
+            this.$cookie.set('saldo', this.saldo, 1)
+            this.$router.push('/')
+            break
+          default:
+            this.swal('Canceled')
+        }
+      })
       }
     }
   },
@@ -182,7 +218,6 @@ export default {
   created () {
     this.movieid = window.sessionStorage.getItem('movieidprops')
     this.fetchMovie(this.movieid)
-    this.getprice()
   }
 }
 </script>
